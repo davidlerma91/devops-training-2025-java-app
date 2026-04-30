@@ -12,6 +12,13 @@ pipeline {
             }
         }
 
+        stage('Info') {
+            steps {
+                echo "Job: ${env.JOB_NAME}"
+                echo "Build: ${env.BUILD_NUMBER}"
+            }
+        }
+
         stage('Check registry credentials') {
             steps {
                 withCredentials([usernamePassword(
