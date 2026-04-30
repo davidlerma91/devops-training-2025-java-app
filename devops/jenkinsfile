@@ -19,6 +19,17 @@ pipeline {
             }
         }
 
+        stage('Test') {
+            agent {
+                docker {
+                    image 'maven:3.8.6-openjdk-11-slim'
+                }
+            }
+            steps {
+                sh 'mvn test'
+            }
+        }
+
         stage('Check registry credentials') {
             steps {
                 withCredentials([usernamePassword(
