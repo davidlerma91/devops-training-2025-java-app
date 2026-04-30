@@ -1,10 +1,30 @@
 pipeline {
     agent any
 
+    environment {
+        LOCAL_REGISTRY = 'local-registry:5000'
+    }
+
     stages {
         stage('Dummy') {
             steps {
                 echo 'Dummy Jenkins pipeline'
+            }
+        }
+
+        stage('Check registry credentials') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'local-registry-creds',
+                    usernameVariable: 'REGISTRY_USER',
+                    passwordVariable: 'REGISTRY_PASS'
+                )]) {
+                    sh '''
+                        test -n "$REGISTRY_USER"
+                        test -n "$REGISTRY_PASS"
+                    '''
+                    echo "Local registry credentials are configured for ${env.LOCAL_REGISTRY}"
+                }
             }
         }
     }
